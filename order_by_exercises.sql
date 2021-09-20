@@ -84,4 +84,23 @@ ORDER BY emp_no desc;
 
 # The last employee number is 499648, with corresponding first and last name of Tadahiro Erde.
 
+/* 6. Write a query to to find all employees whose last name starts and ends with 'E'. Sort the results by their hire date, so that the newest employees are listed first. Enter a comment with the number of employees returned, the name of the newest employee, and the name of the oldest emmployee. */
 
+SELECT first_name, last_name, hire_date
+FROM employees
+WHERE last_name LIKE 'E%'
+	AND last_name LIKE '%E'
+ORDER BY hire_date DESC;
+
+
+# The number of employees with last name starts and ends with 'E' is 899.
+
+# The newest employee is Teiji Eldridge.
+
+SELECT first_name, last_name, hire_date
+FROM employees
+WHERE last_name LIKE 'E%'
+	AND last_name LIKE '%E'
+ORDER BY hire_date;
+
+# The oldest employee is Sergi Erde. 
