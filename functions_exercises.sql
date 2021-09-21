@@ -1,3 +1,30 @@
+# FUNCTIONS EXERCISES
+
+-- 1. Copy the order by exercise and save it as functions_exercises.sql. 
+-- 2. Write a query to to find all employees whose last name starts and ends with 'E'. Use concat() to combine their first and last name together as a single column named full_name.
+USE employees;
+SELECT CONCAT(first_name, " ", last_name) AS full_name
+FROM employees
+WHERE last_name LIKE '%E' 
+	AND last_name LIKE 'E%';
+	
+-- 3. Convert the names produced in your last query to all uppercase.
+SELECT UPPER(CONCAT(first_name, " ", last_name)) AS full_name
+FROM employees
+WHERE last_name LIKE '%E' 
+	AND last_name LIKE 'E%';
+	
+-- 4. Find all employees hired in the 90s and born on Christmas. Use datediff() function to find how many days they have been working at the company (Hint: You will also need to use NOW() or CURDATE()),
+
+SELECT DATEDIFF(CURDATE(),hire_date)/365 AS years_at_company, CONCAT(first_name, " ", last_name) AS Name, hire_date AS Hired_in_the_90s, birth_date AS Born_on_Christmas
+FROM employees
+WHERE hire_date LIKE'%199%' 
+	AND birth_date LIKE '%12-25%';
+
+
+
+# from ORDER BY EXERCISES
+
 USE employees;
 EXPLAIN employees;
 
