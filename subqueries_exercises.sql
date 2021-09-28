@@ -15,28 +15,44 @@ and hire_date =
 	)
 order by first_name, last_name;
 
--- 2. Find all the titles ever held by all current employees with the first name Aamod.
-select title as 'Title'
-from titles
-join employees
-using(emp_no)
-where to_date like '9999%'
-and emp_no in
-	(
-	select emp_no
+-- instructor solution test
+select *
+from employees
+JOIN dept_emp using(emp_no)
+where to_date > now()
+and hire_date =
+	(select hire_date
 	from employees
-	where first_name = 'Aamod'
-	)
-group by title
+	where emp_no = 101010);
+	
+	
+	
+
+-- 2. Find all the titles ever held by all current employees with the first name Aamod.
+
+select distinct title
+from titles
+where emp_no in 
+	(select emp_no
+	from employees
+	where first_name = 'Aamod')
+and to_date > now()
 order by title;
 
--- 3. How many people in the employees table are no longer working for the company? Give the answer in a comment in your code. 59,900
-select count(*) 
-from employees
-join dept_emp_latest_date
-using(emp_no)
-where to_date < curdate(); 
+-- instructor solution test
+select distinct title
+from titles
+where emp_no IN (
+   select emp_no
+   from employees
+   join dept_emp using(emp_no)
+   where first_name = 'aamod'
+   and to_date > now()
+);
 
+
+
+-- 3. How many people in the employees table are no longer working for the company? Give the answer in a comment in your code. 59,900
 select count(*)
 from (
 	select *
@@ -46,6 +62,22 @@ from (
 	where to_date < curdate()
 	) 
 as o;
+
+select count(*)
+from employees
+where emp_no not in
+	(select emp_no
+	from dept_emp
+	where to_date > now());
+
+-- instructor solution test
+select count(*) # count all the records
+from employees # from the employees table
+where emp_no not in 
+	(select *
+	from dept_emp
+	where to_date > now()
+);
 
 -- 4. Find all the current department managers that are female. List their names in a comment in your code.
 select concat(first_name, ' ', last_name) as Name
@@ -58,34 +90,51 @@ where emp_no in
 		)
 and gender = 'F'
 order by first_name;
+
+-- instructor solution test
+select *
+from employees
+where emp_no in (
+    select emp_no
+       from dept_manager
+          where to_date > now()
+)
+and gender = "F";
 		
 -- 5. Find all the employees who currently have a higher salary than the companies overall, historical average salary.
-select emp_no as 'Employee No', salary as 'Salary', concat(first_name, ' ', last_name) as 'Name' 
+select *
 from salaries
-join employees
-using(emp_no)
-where salary > 
-	(
-	select avg(salary) 
+where to_date > now()
+and salary > (
+	select avg(salary)
 	from salaries
-	)
-and to_date > curdate()
-order by salary;
+);
+
+
+-- instructor solution test
+select first_name, last_name, emp_no
+from employees
+join dept_emp as de using(emp_no)
+where de.to_date > now() 
+and emp_no IN
+	(select emp_no
+	from salaries
+	where salary > (select avg(salary) from salaries));
+	
 
 -- 6. How many current salaries are within 1 standard deviation of the current highest salary? (Hint: you can use a built in function to calculate the standard deviation.) What percentage of all salaries is this?
-select salary 
+
+select salary
 from salaries
-where salary > 
-	(
-	select salary
-	where 
-	from salaries
-	);
+where (salary - stddev(salary)) > 
+	(select salary
+	from salaries);
+
+
+-- instructor solution test
 
 
 
-	select stddev(salary)
-	from salaries;
 
 
 
