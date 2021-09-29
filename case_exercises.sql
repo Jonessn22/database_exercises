@@ -11,6 +11,7 @@ select emp_no, dept_no, from_date, to_date,
 from dept_emp;
 
 -- Write a query that returns all employee names (previous and current), and a new column 'alpha_group' that returns 'A-H', 'I-Q', or 'R-Z' depending on the first letter of their last name.
+use employees;
 select first_name, last_name,
 	case
 		when last_name like 'a%' then 'A - H'
@@ -43,13 +44,39 @@ order by last_name;
 select * from employees order by birth_date; 
 
 select *, 
-	case when birth_date like '195%' then '50s'
+	case when birth_date like '195%' then '50s' 
 	when birth_date like '196%' then '60s'
 	else 'NADA'
 	end as 'decade'	
-from employees
-group by ;
-
+from employees;
+	
+	
 -- BONUS
 
 -- What is the current average salary for each of the following department groups: R&D, Sales & Marketing, Prod & QM, Finance & HR, Customer Service?
+select * from salaries;
+-- emp_no
+-- salary
+-- from_date
+-- to date
+select * from dept_emp;
+-- emp_no
+-- dept_no
+-- from_date
+-- to_date
+select * from departments;
+-- dept_no
+-- dept_name
+
+-- find avergae salary
+
+-- group by emp_no
+
+-- use emp_no to group by dept_no
+select * from employees
+join salaries using(emp_no)
+join dept_emp using(emp_no)
+join departments using(dept_no)
+where salaries.to_date > now()
+group by dept_no;
+
